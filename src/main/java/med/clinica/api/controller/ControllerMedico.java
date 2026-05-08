@@ -6,6 +6,8 @@ import med.clinica.api.medicos.DadosCadastroMedico;
 import med.clinica.api.medicos.DadosListagemMedico;
 import med.clinica.api.medicos.Medico;
 import med.clinica.api.medicos.MedicoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class ControllerMedico {
     }
 
     @GetMapping
-    public List<DadosListagemMedico> listar(){
-        return repository.findAll().stream().map(DadosListagemMedico::new).toList();
+    public Page<DadosListagemMedico> listar(Pageable paginacao){
+        return repository.findAll(paginacao).map(DadosListagemMedico::new);
     }
 }
