@@ -2,10 +2,7 @@ package med.clinica.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.clinica.api.medicos.DadosCadastroMedico;
-import med.clinica.api.medicos.DadosListagemMedico;
-import med.clinica.api.medicos.Medico;
-import med.clinica.api.medicos.MedicoRepository;
+import med.clinica.api.medicos.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,21 @@ public class ControllerMedico {
 
     @GetMapping
     public Page<DadosListagemMedico> listar(Pageable paginacao){
-        return repository.findAll(paginacao).map(DadosListagemMedico::new);
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosAtualizacaoMedico dados){
+        var medico = repository.getReferenceById(dados.id());
+        medico.atualizarInformacoes(dados);
+
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void excluir(@PathVariable Long id){
+        var medico = repository.getReferenceById(id);
+        medico.excluir();
     }
 }

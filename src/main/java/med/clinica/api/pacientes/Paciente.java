@@ -2,10 +2,12 @@ package med.clinica.api.pacientes;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import med.clinica.api.endereco.DadosEndereco;
 import med.clinica.api.endereco.Endereco;
 
 @Table(name = "pacientes")
@@ -23,6 +25,7 @@ public class Paciente {
     private String email;
     private String telefone;
     private String cpf;
+    private boolean ativo;
 
     @Embedded
     private Endereco endereco;
@@ -33,6 +36,25 @@ public class Paciente {
         this.telefone = dados.telefone();
         this.cpf = dados.cpf();
         this.endereco = new Endereco(dados.endereco());
+        this.ativo = true;
     }
 
+    public void atualizarInformacoes(@Valid DadosAtualizacaoPaciente dados) {
+       if(dados.nome() != null){
+           this.nome = dados.nome();
+       }
+       
+       if (dados.telefone() != null){
+           this.telefone = dados.telefone();
+       }
+       
+       if(dados.endereco() != null){
+           this.endereco.atualizarInformacoes(dados.endereco());
+       }
+        
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
 }
