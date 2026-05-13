@@ -1,6 +1,6 @@
-package med.clinica.api.medicos;
+package med.clinica.api.domain.medicos;
 
-import med.clinica.api.endereco.Endereco;
+import med.clinica.api.domain.endereco.Endereco;
 
 public record DadosDetalhamentoMedico(Long id, String nome, String email, String crm, String telefone, Especialidade especialidade, Endereco endereco) {
 

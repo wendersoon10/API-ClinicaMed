@@ -2,7 +2,7 @@ package med.clinica.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.clinica.api.pacientes.*;
+import med.clinica.api.domain.pacientes.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
