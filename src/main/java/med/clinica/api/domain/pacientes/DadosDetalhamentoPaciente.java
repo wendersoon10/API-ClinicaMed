@@ -1,7 +1,6 @@
-package med.clinica.api.controller;
+package med.clinica.api.domain.pacientes;
 
 import med.clinica.api.domain.endereco.Endereco;
-import med.clinica.api.domain.pacientes.Paciente;
 
 public record DadosDetalhamentoPaciente(Long id, String nome, String email, String telefone, String cpf, Endereco endereco) {
 
