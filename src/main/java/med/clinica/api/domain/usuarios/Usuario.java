@@ -1,4 +1,4 @@
-package med.clinica.api.domain.usarios;
+package med.clinica.api.domain.usuarios;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
