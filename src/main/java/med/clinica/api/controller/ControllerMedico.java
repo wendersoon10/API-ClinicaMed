@@ -13,7 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/medicos")
 public class ControllerMedico {
 
-
     private MedicoRepository repository;
 
     public ControllerMedico(MedicoRepository repository) {
