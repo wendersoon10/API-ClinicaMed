@@ -4,6 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import med.clinica.api.domain.usuarios.UsuarioRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,9 +16,11 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private TokenService tokenService;
+    private UsuarioRepository repository;
 
-    public SecurityFilter(TokenService tokenService) {
+    public SecurityFilter(TokenService tokenService, UsuarioRepository repository) {
         this.tokenService = tokenService;
+        this.repository = repository;
     }
 
     @Override
@@ -29,8 +34,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
 
             var subject = tokenService.getSubject(tokenJWT);
+            var usuario = repository.findByLogin(subject);
 
-            System.out.println(subject);
+            var authenticaction = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authenticaction);
+
         }
 
         filterChain.doFilter(request, response);
