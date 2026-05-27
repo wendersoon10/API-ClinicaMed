@@ -1,5 +1,6 @@
 package med.clinica.api.domain.consulta;
 
+import jakarta.validation.Valid;
 import med.clinica.api.domain.ValidacaoException;
 import med.clinica.api.domain.medicos.Medico;
 import med.clinica.api.domain.medicos.MedicoRepository;
@@ -31,7 +32,7 @@ public class AgendaDeConsultas {
         }
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
         var medico = escolherMedico(dados);
-        var consulta = new Consulta(null, medico, paciente, dados.data());
+        var consulta = new Consulta(null, medico, paciente, dados.data(), null);
 
         consultaRepository.save(consulta);
     }
@@ -46,5 +47,14 @@ public class AgendaDeConsultas {
         }
 
         return medicoRepository.escolherMedicoAleatorioDataLivre(dados.especialidade(), dados.especialidade());
+    }
+
+    public void cancelar(@Valid DadosCancelamentoConsulta dados) {
+        if (!consultaRepository.existsById(dados.idConsulta())){
+            throw new ValidacaoException("Id da consulta informado não existe!");
+        }
+
+        var consulta = consultaRepository.getReferenceById(dados.idConsulta());
+        consulta.cancelar(dados.motivo());
     }
 }
