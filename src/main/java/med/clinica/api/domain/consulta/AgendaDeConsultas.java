@@ -2,10 +2,12 @@ package med.clinica.api.domain.consulta;
 
 import jakarta.validation.Valid;
 import med.clinica.api.domain.ValidacaoException;
+import med.clinica.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsultas;
 import med.clinica.api.domain.medicos.Medico;
 import med.clinica.api.domain.medicos.MedicoRepository;
 import med.clinica.api.domain.pacientes.PacienteRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class AgendaDeConsultas {
@@ -14,10 +16,13 @@ public class AgendaDeConsultas {
     private PacienteRepository pacienteRepository;
     private MedicoRepository medicoRepository;
 
-    public AgendaDeConsultas(ConsultaRepository consultaRepository, PacienteRepository pacienteRepository, MedicoRepository medicoRepository) {
+    private List<ValidadorAgendamentoDeConsultas> validadores;
+
+    public AgendaDeConsultas(ConsultaRepository consultaRepository, PacienteRepository pacienteRepository, MedicoRepository medicoRepository, List<ValidadorAgendamentoDeConsultas> validadores) {
         this.consultaRepository = consultaRepository;
         this.pacienteRepository = pacienteRepository;
         this.medicoRepository = medicoRepository;
+        this.validadores = validadores;
     }
 
     public void agendar(DadosAgendamentoConsulta dados)
@@ -30,6 +35,9 @@ public class AgendaDeConsultas {
         if (!medicoRepository.existsById(dados.idMedico())){
             throw new ValidacaoException("Id do médico não existe!");
         }
+
+        validadores.forEach(v -> v.validar(dados));
+
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
         var medico = escolherMedico(dados);
         var consulta = new Consulta(null, medico, paciente, dados.data(), null);

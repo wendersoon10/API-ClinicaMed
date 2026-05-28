@@ -1,13 +1,18 @@
-package med.clinica.api.domain.validacoes;
+package med.clinica.api.domain.consulta.validacoes;
 
 import med.clinica.api.domain.ValidacaoException;
 import med.clinica.api.domain.consulta.ConsultaRepository;
 import med.clinica.api.domain.consulta.DadosAgendamentoConsulta;
-import med.clinica.api.domain.medicos.MedicoRepository;
+import org.springframework.stereotype.Component;
 
-public class ValidadorMedicoComHorarioMarcado {
+@Component
+public class ValidadorMedicoComHorarioMarcado implements ValidadorAgendamentoDeConsultas {
 
     private ConsultaRepository repository;
+
+    public ValidadorMedicoComHorarioMarcado(ConsultaRepository repository) {
+        this.repository = repository;
+    }
 
     public void validar(DadosAgendamentoConsulta dados){
         var medicoIndisponivel = repository.existsByMedicoIdAndData(dados.idMedico(), dados.data());
