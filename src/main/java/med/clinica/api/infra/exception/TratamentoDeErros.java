@@ -1,6 +1,7 @@
 package med.clinica.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import med.clinica.api.domain.ValidacaoException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,13 @@ public class TratamentoDeErros {
         var err = e.getFieldErrors();
         return ResponseEntity.badRequest().body(err.stream().map(DadosErro::new).toList());
     }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity erroRegraDeNegocio(ValidacaoException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+
 
     private record DadosErro(String campo, String mensagem){
 
