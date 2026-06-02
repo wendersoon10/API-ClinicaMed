@@ -3,10 +3,10 @@ package med.clinica.api.domain.consulta;
 import jakarta.validation.Valid;
 import med.clinica.api.controller.DadosDetalhamentoConsulta;
 import med.clinica.api.domain.ValidacaoException;
-import med.clinica.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsultas;
+import med.clinica.api.domain.consulta.validacoes.agendamento.ValidadorAgendamentoDeConsultas;
+import med.clinica.api.domain.consulta.validacoes.cancelamento.ValidadorCancelamentoDeConsulta;
 import med.clinica.api.domain.medicos.Medico;
 import med.clinica.api.domain.medicos.MedicoRepository;
-import med.clinica.api.domain.pacientes.DadosDetalhamentoPaciente;
 import med.clinica.api.domain.pacientes.PacienteRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -19,12 +19,14 @@ public class AgendaDeConsultas {
     private MedicoRepository medicoRepository;
 
     private List<ValidadorAgendamentoDeConsultas> validadores;
+    private List<ValidadorCancelamentoDeConsulta> validadoresCancelamento;
 
-    public AgendaDeConsultas(ConsultaRepository consultaRepository, PacienteRepository pacienteRepository, MedicoRepository medicoRepository, List<ValidadorAgendamentoDeConsultas> validadores) {
+    public AgendaDeConsultas(ConsultaRepository consultaRepository, PacienteRepository pacienteRepository, MedicoRepository medicoRepository, List<ValidadorAgendamentoDeConsultas> validadores, List<ValidadorCancelamentoDeConsulta> validadoresCancelamento) {
         this.consultaRepository = consultaRepository;
         this.pacienteRepository = pacienteRepository;
         this.medicoRepository = medicoRepository;
         this.validadores = validadores;
+        this. validadoresCancelamento = validadoresCancelamento;
     }
 
     public DadosDetalhamentoConsulta agendar(DadosAgendamentoConsulta dados) {
@@ -80,6 +82,8 @@ public class AgendaDeConsultas {
         if (!consultaRepository.existsById(dados.idConsulta())){
             throw new ValidacaoException("Id da consulta informado não existe!");
         }
+
+        validadoresCancelamento.forEach(v -> v.validar(dados));
 
         var consulta = consultaRepository.getReferenceById(dados.idConsulta());
         consulta.cancelar(dados.motivo());

@@ -1,4 +1,4 @@
-package med.clinica.api.domain.consulta.validacoes;
+package med.clinica.api.domain.consulta.validacoes.agendamento;
 
 import med.clinica.api.domain.ValidacaoException;
 import med.clinica.api.domain.consulta.ConsultaRepository;
@@ -15,7 +15,7 @@ public class ValidadorMedicoComHorarioMarcado implements ValidadorAgendamentoDeC
     }
 
     public void validar(DadosAgendamentoConsulta dados){
-        var medicoIndisponivel = repository.existsByMedicoIdAndData(dados.idMedico(), dados.data());
+        var medicoIndisponivel = repository.existsByMedicoIdAndDataAndMotivoCancelamentoIsNull(dados.idMedico(), dados.data());
         if(medicoIndisponivel){
             throw new ValidacaoException("Médico já possui outra consulta no mesmo horário");
         }

@@ -1,4 +1,4 @@
-package med.clinica.api.domain.consulta.validacoes;
+package med.clinica.api.domain.consulta.validacoes.agendamento;
 
 import med.clinica.api.domain.ValidacaoException;
 import med.clinica.api.domain.consulta.ConsultaRepository;
