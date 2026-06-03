@@ -1,5 +1,6 @@
 package med.clinica.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.clinica.api.domain.medicos.*;
@@ -11,11 +12,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/medicos")
-public class ControllerMedico {
+@SecurityRequirement(name = "bearer-key")
+public class MedicoController {
 
     private MedicoRepository repository;
 
-    public ControllerMedico(MedicoRepository repository) {
+    public MedicoController(MedicoRepository repository) {
         this.repository = repository;
     }
 
