@@ -204,18 +204,4 @@ DELETE /consultas
   "data": "2026-07-20T10:00:00",
   "especialidade": "CARDIOLOGIA"
 }
-Pontos fortes
-Regras de negócio bem definidas
-Validações desacopladas
-Seleção automática de médico
-Soft delete
-Segurança JWT stateless
-Arquitetura organizada e escalável
-Possíveis melhorias
-Notificações por e-mail ou SMS
-Histórico completo de consultas
-Painel administrativo
-Cache para consultas
-Auditoria de ações
-Integração com calendário externo
 
